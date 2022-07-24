@@ -47,15 +47,15 @@ pub struct TimeConfig {
     pub interval: Duration,
 }
 
-fn default_display() -> u32 {
+fn default_display() -> Vec<u32> {
     // Display :0
-    0
+    [ 0 ].to_vec()
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct X11Config {
     #[serde(default = "default_display")]
-    pub display: u32,
+    pub display: Vec<u32>,
 
     #[serde(default)]
     pub force: bool,

@@ -87,11 +87,13 @@ async fn main() {
     }
 
     if let Some(config) = &CONFIG.x11 {
-        tasks.push(tokio::task::spawn(async move {
-            if let Err(err) = x11::x11_forward(config).await {
-                eprintln!("Failed to listen: {}", err);
-            }
-        }));
+        for display in config.display.iter() {
+            tasks.push(tokio::task::spawn(async move {
+                if let Err(err) = x11::x11_forward(config, *display).await {
+                    eprintln!("Failed to listen: {}", err);
+                }
+            }));
+        }
     }
 
     if let Some(config) = &CONFIG.tcp_forward {
