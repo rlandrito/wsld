@@ -7,15 +7,19 @@ use tokio::io::AsyncReadExt;
 pub async fn handle_x11(mut stream: TcpStream) -> std::io::Result<()> {
     // this needs error checking
     let display_num = stream.read_u8().await?;
+    eprintln!("display_num: {}", display_num);
+    let display_num_16 = display_num as u16;
+    eprintln!("display_num_16: {}", display_num_16);
     //TODO
     //if display_num > 9 {
     //    return Err(());
     //}
     let base_display_hostport_vec: Vec<&str> = CONFIG.x11.display.split(":").collect();
     let base_port: u16 = base_display_hostport_vec[1].parse().unwrap();
-    let dest_port = ((display_num as u16) << 8) + base_port;
+    let dest_port = display_num_16 + base_port;
 
     let display_host_port = format!("{}:{}", base_display_hostport_vec[0], dest_port);
+    eprintln!("connecting to {}", display_host_port);
 
     let (client_r, client_w) = stream.split();
 

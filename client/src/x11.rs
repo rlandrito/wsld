@@ -37,7 +37,7 @@ async fn handle_stream(mut stream: UnixStream) -> std::io::Result<()> {
     //if display != 0 { return Ok(()); }
 
     server.write_all(b"x11\0").await?;
-    //server.write_u8(display).await?;
+    server.write_u8(display).await?;
 
     let (client_r, client_w) = stream.split();
     let (server_r, server_w) = server.split();
