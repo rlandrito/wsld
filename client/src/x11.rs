@@ -20,6 +20,7 @@ async fn handle_stream(mut stream: UnixStream, display: u8) -> std::io::Result<(
     let (server_r, server_w) = server.split();
     let a = connect_stream(client_r, server_w);
     let b = connect_stream(server_r, client_w);
+    println!("Streams connected");
     either(a, b).await
 }
 
