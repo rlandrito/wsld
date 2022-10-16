@@ -10,8 +10,6 @@ use tokio::io::AsyncWriteExt;
 use tokio::net::UnixStream;
 
 async fn handle_stream(mut stream: UnixStream, display: u8) -> std::io::Result<()> {
-    println!("{}", display);
-
     let mut server = VmSocket::connect(CONFIG.service_port).await?;
     server.write_all(b"x11\0").await?;
     server.write_u8(display).await?;
@@ -20,7 +18,6 @@ async fn handle_stream(mut stream: UnixStream, display: u8) -> std::io::Result<(
     let (server_r, server_w) = server.split();
     let a = connect_stream(client_r, server_w);
     let b = connect_stream(server_r, client_w);
-    println!("Streams connected");
     either(a, b).await
 }
 
